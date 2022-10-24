@@ -43,7 +43,7 @@ namespace Week7Databases
             foreach (var file in filesToProcess)
             {
                 SQLEngine engine = new SQLEngine(parentDatabaseName, childDatabaseName, file);
-                //errors.AddRange(engine.RunSqlTasks());
+                errors.AddRange(engine.RunSqlTasks());
             }
 
             if (!hasErrors)

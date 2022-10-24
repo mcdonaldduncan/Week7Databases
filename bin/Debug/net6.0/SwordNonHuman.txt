@@ -1,0 +1,25 @@
+Processed at: 10/24/2022 12:11:46 AM
+
+ID, Character
+6|Otis
+7|Carla
+8|Captain Madison
+12|Elain Marley
+18|Otis
+19|Carla
+20|Captain Madison
+24|Elain Marley
+25|Captain LeChuck
+27|Iron Rose
+34|Otis
+35|Carla
+36|Captain Madison
+40|Elain Marley
+41|Captain LeChuck
+43|Iron Rose
+50|Otis
+51|Carla
+52|Captain Madison
+56|Elain Marley
+57|Captain LeChuck
+59|Iron Rose

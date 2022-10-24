@@ -33,6 +33,16 @@ namespace Week7Databases
 
         }
 
+        public List<Error> RunSqlTasks()
+        {
+            List<Error> errors = new List<Error>();
+            errors.AddRange(Insert());
+            errors.AddRange(FullReport());
+            errors.AddRange(FindMaplessCharacters());
+            errors.AddRange(FindSwordNonHuman());
+            return errors;
+        }
+
         private List<Error> Insert()
         {
             List<Error> errors = new List<Error>();
@@ -52,6 +62,19 @@ namespace Week7Databases
                         else
                         {
                             var lineItems = sr.ReadLine()?.Split(CurrentFile.Delimiter) ?? new string[0];
+
+                            for (int i = 0; i < lineItems.Length; i++)
+                            {
+                                if (lineItems[i] == String.Empty)
+                                {
+                                    lineItems[i] = @"NULL";
+                                }
+                                else if (lineItems[i].Contains("'"))
+                                {
+                                    lineItems[i] = lineItems[i].Replace(lineItems[i].Substring(lineItems[i].IndexOf(@"'")), @"''s");
+                                }
+                            }
+
                             lines.Add(lineItems);
                         }
 
@@ -74,7 +97,7 @@ namespace Week7Databases
                             var query = command.ExecuteNonQuery();
                         }
 
-                        string inLineSqlGetID = $@"SELECT * FROM {TableName} ORDER BY ID DESC LIMIT 1";
+                        string inLineSqlGetID = $@"SELECT TOP 1 ID FROM {TableName} ORDER BY ID DESC";
 
                         // get the id of the most recent insert in the parent table, derived from example by Sebastian
                         using (var command = new SqlCommand(inLineSqlGetID, conn))
@@ -290,7 +313,7 @@ namespace Week7Databases
         {
             List<Error> errors = new List<Error>();
             Dictionary<int, List<string>> lines = new Dictionary<int, List<string>>();
-            int fields = 7;
+            int fields = 2;
 
             try
             {
@@ -298,11 +321,11 @@ namespace Week7Databases
                 {
                     conn.Open();
 
-                    string inLineSql_primary = $@"SELECT {TableName}.Character
+                    string inLineSql_primary = $@"SELECT {TableName}.ID, {TableName}.Character
                                                 FROM {TableName} 
                                                 LEFT JOIN {ChildTableName} 
                                                 ON {TableName}.ID = {ChildTableName}.CharacterID
-                                                WHERE {ChildTableName}.Map_Location is NULL";
+                                                WHERE {ChildTableName}.Sword_Fighter = 'TRUE' and {ChildTableName}.Type != 'Human'";
 
 
                     using (var command = new SqlCommand(inLineSql_primary, conn))
@@ -326,8 +349,8 @@ namespace Week7Databases
                     conn.Close();
                 }
 
-                string columNames = "Character";
-                ExportData("Lost.txt", columNames, lines);
+                string columNames = "ID, Character";
+                ExportData("SwordNonHuman.txt", columNames, lines);
 
             }
             catch (IOException ioe)
