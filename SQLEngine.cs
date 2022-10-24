@@ -59,8 +59,6 @@ namespace Week7Databases
                     }
                 }
 
-
-
                 using (SqlConnection conn = new SqlConnection(SqlConString))
                 {
                     conn.Open();
@@ -124,13 +122,42 @@ namespace Week7Databases
             return init;
         }
 
-        private List<Error> PrintFile()
+        // "ID,Name,Location,Price,UoM,Sell_by_Date"
+
+        private List<Error> ExportData(string writePath, string includedColumns, Dictionary<int, List<string>> data)
         {
             List<Error> errors = new List<Error>();
 
             try
             {
+                if (File.Exists(writePath))
+                {
+                    File.Delete(writePath);
+                }
 
+                using (StreamWriter sw = new StreamWriter(writePath, true))
+                {
+                    sw.WriteLine($"Processed at: {DateTime.Now}");
+                    sw.WriteLine();
+                    sw.WriteLine(includedColumns);
+
+                    foreach (var item in data)
+                    {
+                        string temp = "";
+                        for (int i = 0; i < item.Value.Count; i++)
+                        {
+                            if (i == item.Value.Count - 1)
+                            {
+                                temp += item.Value[i];
+                            }
+                            else
+                            {
+                                temp += $"{item.Value[i]}|";
+                            }
+                        }
+                        sw.WriteLine(temp);
+                    }
+                }
             }
             catch (IOException ioe)
             {
@@ -148,7 +175,8 @@ namespace Week7Databases
         private List<Error> FullReport()
         {
             List<Error> errors = new List<Error>();
-            List<String> lines = new List<String>();
+            Dictionary<int, List<string>> lines = new Dictionary<int, List<string>>();
+            int fields = 7;
 
             try
             {
@@ -165,11 +193,15 @@ namespace Week7Databases
                     using (var command = new SqlCommand(inLineSql_primary, conn))
                     {
                         var reader = command.ExecuteReader();
-
+                        int index = 0;
                         while(reader.Read())
                         {
-                            string line = $"{ConvertEmptyValue(reader.GetValue(0).ToString())}|{ConvertEmptyValue(reader.GetValue(1).ToString())}|{ConvertEmptyValue(reader.GetValue(2).ToString())}|{ConvertEmptyValue(reader.GetValue(3).ToString())}|{ConvertEmptyValue(reader.GetValue(4).ToString())}|{ConvertEmptyValue(reader.GetValue(5).ToString())}|{ConvertEmptyValue(reader.GetValue(6).ToString())}";
-                            lines.Add(line);
+                            List<string> temp = new List<string>();
+                            for (int i = 0; i < fields; i++)
+                            {
+                                temp.Add(ConvertEmptyValue($"{reader.GetValue(i)}"));
+                            }
+                            lines.Add(index++, temp);
                         }
 
                         reader.Close();
@@ -179,6 +211,123 @@ namespace Week7Databases
                     conn.Close();
                 }
 
+                string columNames = "ID,Character,Type,Map_Location,Original_Character,Sword_Fighter,Magic_User";
+                ExportData("FullReport.txt", columNames, lines);
+
+            }
+            catch (IOException ioe)
+            {
+                errors.Add(new Error(ioe.Message, ioe.Source));
+            }
+            catch (Exception e)
+            {
+                errors.Add(new Error(e.Message, e.Source));
+            }
+
+
+            return errors;
+        }
+
+        private List<Error> FindMaplessCharacters()
+        {
+            List<Error> errors = new List<Error>();
+            Dictionary<int, List<string>> lines = new Dictionary<int, List<string>>();
+            int fields = 1;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(SqlConString))
+                {
+                    conn.Open();
+
+                    string inLineSql_primary = $@"SELECT {TableName}.Character
+                                                FROM {TableName} 
+                                                LEFT JOIN {ChildTableName} 
+                                                ON {TableName}.ID = {ChildTableName}.CharacterID
+                                                WHERE {ChildTableName}.Map_Location is NULL";
+
+
+                    using (var command = new SqlCommand(inLineSql_primary, conn))
+                    {
+                        var reader = command.ExecuteReader();
+                        int index = 0;
+                        while (reader.Read())
+                        {
+                            List<string> temp = new List<string>();
+                            for (int i = 0; i < fields; i++)
+                            {
+                                temp.Add(ConvertEmptyValue($"{reader.GetValue(i)}"));
+                            }
+                            lines.Add(index++, temp);
+                        }
+
+                        reader.Close();
+
+                    }
+
+                    conn.Close();
+                }
+
+                string columNames = "Character";
+                ExportData("Lost.txt", columNames, lines);
+
+            }
+            catch (IOException ioe)
+            {
+                errors.Add(new Error(ioe.Message, ioe.Source));
+            }
+            catch (Exception e)
+            {
+                errors.Add(new Error(e.Message, e.Source));
+            }
+
+
+            return errors;
+        }
+
+
+        private List<Error> FindSwordNonHuman()
+        {
+            List<Error> errors = new List<Error>();
+            Dictionary<int, List<string>> lines = new Dictionary<int, List<string>>();
+            int fields = 7;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(SqlConString))
+                {
+                    conn.Open();
+
+                    string inLineSql_primary = $@"SELECT {TableName}.Character
+                                                FROM {TableName} 
+                                                LEFT JOIN {ChildTableName} 
+                                                ON {TableName}.ID = {ChildTableName}.CharacterID
+                                                WHERE {ChildTableName}.Map_Location is NULL";
+
+
+                    using (var command = new SqlCommand(inLineSql_primary, conn))
+                    {
+                        var reader = command.ExecuteReader();
+                        int index = 0;
+                        while (reader.Read())
+                        {
+                            List<string> temp = new List<string>();
+                            for (int i = 0; i < fields; i++)
+                            {
+                                temp.Add(ConvertEmptyValue($"{reader.GetValue(i)}"));
+                            }
+                            lines.Add(index++, temp);
+                        }
+
+                        reader.Close();
+
+                    }
+
+                    conn.Close();
+                }
+
+                string columNames = "Character";
+                ExportData("Lost.txt", columNames, lines);
 
             }
             catch (IOException ioe)
