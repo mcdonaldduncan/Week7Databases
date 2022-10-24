@@ -147,9 +147,10 @@ namespace Week7Databases
 
         // "ID,Name,Location,Price,UoM,Sell_by_Date"
 
-        private List<Error> ExportData(string writePath, string includedColumns, Dictionary<int, List<string>> data)
+        private List<Error> ExportData(string newFileName, string includedColumns, Dictionary<int, List<string>> data)
         {
             List<Error> errors = new List<Error>();
+            string writePath = Path.Combine(directoryPath, newFileName);
 
             try
             {
