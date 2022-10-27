@@ -320,8 +320,7 @@ namespace Week7Databases
                                                 FROM {TableName} 
                                                 INNER JOIN {ChildTableName} ON {TableName}.ID = {ChildTableName}.CharacterID
                                                 LEFT JOIN {Types} ON {TableName}.TypeID = {Types}.ID
-                                                LEFT JOIN {Map_Locations} ON {TableName}.MapLocationID = {Map_Locations}.ID 
-                                                ";
+                                                LEFT JOIN {Map_Locations} ON {TableName}.MapLocationID = {Map_Locations}.ID";
 
                     using (var command = new SqlCommand(inLineSql_primary, conn))
                     {
