@@ -62,7 +62,7 @@ namespace Week7Databases
 
         List<string> GetAllFiles()
         {
-            return Directory.GetFiles(directoryPath).Where(x => !x.EndsWith("_out.txt")).ToList();
+            return Directory.GetFiles(directoryPath).Where(x => !x.EndsWith(".txt")).ToList();
         }
 
         /// <summary>
