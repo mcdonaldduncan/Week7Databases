@@ -47,6 +47,8 @@ namespace Week7Databases
         {
             List<Error> errors = new List<Error>();
             List<string[]> lines = new List<string[]>();
+            List<string> types = new List<string>();
+            List<string> map_locations = new List<string>();
 
             try
             {
@@ -65,14 +67,28 @@ namespace Week7Databases
 
                             for (int i = 0; i < lineItems.Length; i++)
                             {
-                                if (lineItems[i] == String.Empty)
+                                lineItems[i] = lineItems[i].Trim();
+
+                                //if (lineItems[i] == String.Empty)
+                                //{
+                                //    lineItems[i] = @"NULL";
+                                //}
+                                if (lineItems[i].Contains("'"))
                                 {
-                                    lineItems[i] = @"NULL";
+                                    lineItems[i] = lineItems[i].Replace(lineItems[i].Substring(lineItems[i].IndexOf(@"'")), @"''s ship");
                                 }
-                                else if (lineItems[i].Contains("'"))
-                                {
-                                    lineItems[i] = lineItems[i].Replace(lineItems[i].Substring(lineItems[i].IndexOf(@"'")), @"''s");
-                                }
+                            }
+
+                            // Get all unique types
+                            if (!types.Contains(lineItems[1]) && lineItems[1] != string.Empty)
+                            {
+                                types.Add(lineItems[1]);
+                            }
+
+                            // Get all unique map locations
+                            if (!map_locations.Contains(lineItems[2]) && lineItems[2] != string.Empty)
+                            {
+                                map_locations.Add(lineItems[2]);
                             }
 
                             lines.Add(lineItems);
@@ -85,11 +101,89 @@ namespace Week7Databases
                 using (SqlConnection conn = new SqlConnection(SqlConString))
                 {
                     conn.Open();
+                    foreach (var item in types)
+                    {
+                        string inLineSQL_type = $@"INSERT INTO {Types} {TypeHeaders} VALUES ('{item}')";
+                        using (var command = new SqlCommand(inLineSQL_type, conn))
+                        {
+                            var query = command.ExecuteNonQuery();
+                        }
+                    }
+
+                    foreach (var item in map_locations)
+                    {
+                        string inLineSQL_map = $@"INSERT INTO {Map_Locations} {MapHeaders} VALUES ('{item}')";
+                        using (var command = new SqlCommand(inLineSQL_map, conn))
+                        {
+                            var query = command.ExecuteNonQuery();
+                        }
+                    }
+
+                    //foreach (var item in lines)
+                    //{
+                    //    if (item[1] != @"NULL" && item[1] != string.Empty)
+                    //    {
+                    //        item[1] = (types.IndexOf(item[1]) + 1).ToString();
+                    //    }
+                    //    else
+                    //    {
+                    //        item[1] = @"NULL";
+                    //    }
+                    //    if (item[2] != @"NULL" && item[2] != string.Empty)
+                    //    {
+                    //        item[2] = (map_locations.IndexOf(item[2]) + 1).ToString();
+                    //    }
+                    //    else
+                    //    {
+                    //        item[2] = @"NULL";
+
+                    //    }
+                    //}
+
 
                     foreach (var item in lines)
                     {
+                        string typeID = string.Empty;
+                        string MapID = string.Empty;
+
+                        string inLineSql_getTypeID = $@"SELECT TOP 1 ID FROM {Types} WHERE Type = '{item[1]}' ORDER BY ID DESC";
+                        string inLineSql_getMapID = $@"SELECT TOP 1 ID FROM {Map_Locations} WHERE Map_Location = '{item[2]}' ORDER BY ID DESC";
+
+                        using (var command = new SqlCommand(inLineSql_getTypeID, conn))
+                        {
+                            var reader = command.ExecuteReader();
+
+                            while (reader.Read())
+                            {
+                                typeID = reader.GetValue(0)?.ToString() ?? @"NULL";
+                            }
+
+                            reader.Close();
+                        }
+
+                        using (var command = new SqlCommand(inLineSql_getMapID, conn))
+                        {
+                            var reader = command.ExecuteReader();
+
+                            while (reader.Read())
+                            {
+                                MapID = reader.GetValue(0)?.ToString() ?? @"NULL";
+                            }
+
+                            reader.Close();
+                        }
+
+                        if (typeID == "")
+                        {
+                            typeID = @"NULL";
+                        }
+                        if (MapID == "")
+                        {
+                            MapID = @"NULL";
+                        }
+
                         int? characterID = null;
-                        string inLineSql_primary = $@"INSERT INTO {TableName} {primaryHeaders} VALUES ('{item[0]}')";
+                        string inLineSql_primary = $@"INSERT INTO {TableName} {CharacterHeaders} VALUES ('{item[0]}', {typeID}, {MapID})";
                         
 
                         using (var command = new SqlCommand(inLineSql_primary, conn))
@@ -112,7 +206,7 @@ namespace Week7Databases
                             reader.Close();
                         }
 
-                        string inLineSql_secondary = $@"INSERT INTO {ChildTableName} {secondaryHeaders} VALUES ('{characterID}', '{item[1]}', '{item[2]}', '{item[3]}', '{item[4]}', '{item[5]}')";
+                        string inLineSql_secondary = $@"INSERT INTO {ChildTableName} {InfoHeaders} VALUES ('{characterID}', '{item[3]}', '{item[4]}', '{item[5]}')";
 
                         using (var command = new SqlCommand(inLineSql_secondary, conn))
                         {
@@ -136,6 +230,11 @@ namespace Week7Databases
             return errors;
         }
 
+        /// <summary>
+        /// Convert empty results to a more readable value
+        /// </summary>
+        /// <param name="init"></param>
+        /// <returns></returns>
         string ConvertEmptyValue(string init)
         {
             if (init == null || init == string.Empty)
@@ -145,8 +244,13 @@ namespace Week7Databases
             return init;
         }
 
-        // "ID,Name,Location,Price,UoM,Sell_by_Date"
-
+        /// <summary>
+        /// Export a dictionary of data previously collected to a new file with filename and the header specified by params
+        /// </summary>
+        /// <param name="newFileName">name for the new file</param>
+        /// <param name="includedColumns">columns included in this export, to be displayed at the top of the exported file</param>
+        /// <param name="data">dictionary of data collected through SQL commands</param>
+        /// <returns></returns>
         private List<Error> ExportData(string newFileName, string includedColumns, Dictionary<int, List<string>> data)
         {
             List<Error> errors = new List<Error>();
@@ -196,6 +300,10 @@ namespace Week7Databases
             return errors;
         }
 
+        /// <summary>
+        /// Read all data from the Character and Character_Info tablesusing join and write the report to a file titled FullReport.txt
+        /// </summary>
+        /// <returns></returns>
         private List<Error> FullReport()
         {
             List<Error> errors = new List<Error>();
@@ -208,11 +316,12 @@ namespace Week7Databases
                 {
                     conn.Open();
 
-                    string inLineSql_primary = $@"SELECT {TableName}.ID, {TableName}.Character, {ChildTableName}.Type, {ChildTableName}.Map_Location, {ChildTableName}.Original_Character, {ChildTableName}.Sword_Fighter, {ChildTableName}.Magic_User
+                    string inLineSql_primary = $@"SELECT {TableName}.ID, {TableName}.Character, {Types}.Type, {Map_Locations}.Map_Location, {ChildTableName}.Original_Character, {ChildTableName}.Sword_Fighter, {ChildTableName}.Magic_User
                                                 FROM {TableName} 
-                                                INNER JOIN {ChildTableName} 
-                                                ON {TableName}.ID = {ChildTableName}.CharacterID";
-
+                                                INNER JOIN {ChildTableName} ON {TableName}.ID = {ChildTableName}.CharacterID
+                                                LEFT JOIN {Types} ON {TableName}.TypeID = {Types}.ID
+                                                LEFT JOIN {Map_Locations} ON {TableName}.MapLocationID = {Map_Locations}.ID 
+                                                ";
 
                     using (var command = new SqlCommand(inLineSql_primary, conn))
                     {
@@ -252,6 +361,10 @@ namespace Week7Databases
             return errors;
         }
 
+        /// <summary>
+        /// Uses a join to find all characters without a value for their map_location field before writing data to a file titled Lost.txt
+        /// </summary>
+        /// <returns></returns>
         private List<Error> FindMaplessCharacters()
         {
             List<Error> errors = new List<Error>();
@@ -266,9 +379,9 @@ namespace Week7Databases
 
                     string inLineSql_primary = $@"SELECT {TableName}.Character
                                                 FROM {TableName} 
-                                                LEFT JOIN {ChildTableName} 
-                                                ON {TableName}.ID = {ChildTableName}.CharacterID
-                                                WHERE {ChildTableName}.Map_Location is NULL";
+                                                LEFT JOIN {Map_Locations} 
+                                                ON {TableName}.MapLocationID = {Map_Locations}.ID
+                                                WHERE {Map_Locations}.Map_Location is NULL";
 
 
                     using (var command = new SqlCommand(inLineSql_primary, conn))
@@ -309,7 +422,10 @@ namespace Week7Databases
             return errors;
         }
 
-
+        /// <summary>
+        /// find all characters with any type other than human who also are sword wielders before writing data to a file titled SwordNonHuman.txt
+        /// </summary>
+        /// <returns></returns>
         private List<Error> FindSwordNonHuman()
         {
             List<Error> errors = new List<Error>();
@@ -324,9 +440,11 @@ namespace Week7Databases
 
                     string inLineSql_primary = $@"SELECT {TableName}.ID, {TableName}.Character
                                                 FROM {TableName} 
-                                                LEFT JOIN {ChildTableName} 
-                                                ON {TableName}.ID = {ChildTableName}.CharacterID
-                                                WHERE {ChildTableName}.Sword_Fighter = 'TRUE' and {ChildTableName}.Type != 'Human'";
+                                                LEFT JOIN {Types} 
+                                                ON {TableName}.TypeID = {Types}.ID
+                                                LEFT JOIN {ChildTableName}
+                                                ON {ChildTableName}.CharacterID = {TableName}.ID
+                                                WHERE {ChildTableName}.Sword_Fighter = 'TRUE' and {Types}.Type != 'Human'";
 
 
                     using (var command = new SqlCommand(inLineSql_primary, conn))
@@ -366,7 +484,5 @@ namespace Week7Databases
 
             return errors;
         }
-
     }
-
 }

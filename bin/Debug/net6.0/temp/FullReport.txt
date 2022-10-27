@@ -1,78 +1,19 @@
-Processed at: 10/24/2022 12:16:20 AM
+Processed at: 10/26/2022 9:39:18 PM
 
 ID,Character,Type,Map_Location,Original_Character,Sword_Fighter,Magic_User
-2|Murray| Ghost|TRUE|null|FALSE|FALSE
-3|Locke Smith| Human|FALSE|Melee Island|FALSE|FALSE
-4|Herman Toothrot|null|FALSE|Terror Island|FALSE|null
-5|Voodoo Lady| Melee Island|TRUE|Melee Island|FALSE|TRUE
-6|Otis| Inmate|TRUE|Melee Island|TRUE|FALSE
-7|Carla| Pirate|TRUE|Melee Island|TRUE|FALSE
-8|Captain Madison|Pirate|FALSE|Melee Island|TRUE|FALSE
-9|Judge Planke|NPC|FALSE|Brrrmuda|FALSE|FALSE
-10|Boybrush Threepwood|Human|FALSE|null|null|FALSE
-11|Guybrush Threepwood|Mighty Pirate|TRUE|null|FALSE|null
-12|Elain Marley|Politician|TRUE|Scurvy Island|TRUE|FALSE
-14|Murray| Ghost|TRUE|NULL|FALSE|FALSE
-15|Locke Smith| Human|FALSE|Melee Island|FALSE|FALSE
-16|Herman Toothrot|NULL|FALSE|Terror Island|FALSE|NULL
-17|Voodoo Lady| Melee Island|TRUE|Melee Island|FALSE|TRUE
-18|Otis| Inmate|TRUE|Melee Island|TRUE|FALSE
-19|Carla| Pirate|TRUE|Melee Island|TRUE|FALSE
-20|Captain Madison|Pirate|FALSE|Melee Island|TRUE|FALSE
-21|Judge Planke|NPC|FALSE|Brrrmuda|FALSE|FALSE
-22|Boybrush Threepwood|Human|FALSE|NULL|NULL|FALSE
-23|Guybrush Threepwood|Mighty Pirate|TRUE|NULL|FALSE|NULL
-24|Elain Marley|Politician|TRUE|Scurvy Island|TRUE|FALSE
-25|Captain LeChuck|Ghost Pirate|TRUE|LeChuck's|TRUE|TRUE
-26|Putra|Ghost Cook|FALSE|LeChuck's|FALSE|FALSE
-27|Iron Rose|Ghost Pirate|FALSE|LeChuck's|TRUE|FALSE
-28|Ned|Human|TRUE|NULL|FALSE|FALSE
-29|Flambe|Fire Ghost|FALSE|LeChuck's|FALSE|TRUE
-30|Murray| Ghost|TRUE|NULL|FALSE|FALSE
-31|Locke Smith| Human|FALSE|Melee Island|FALSE|FALSE
-32|Herman Toothrot|NULL|FALSE|Terror Island|FALSE|NULL
-33|Voodoo Lady| Melee Island|TRUE|Melee Island|FALSE|TRUE
-34|Otis| Inmate|TRUE|Melee Island|TRUE|FALSE
-35|Carla| Pirate|TRUE|Melee Island|TRUE|FALSE
-36|Captain Madison|Pirate|FALSE|Melee Island|TRUE|FALSE
-37|Judge Planke|NPC|FALSE|Brrrmuda|FALSE|FALSE
-38|Boybrush Threepwood|Human|FALSE|NULL|NULL|FALSE
-39|Guybrush Threepwood|Mighty Pirate|TRUE|NULL|FALSE|NULL
-40|Elain Marley|Politician|TRUE|Scurvy Island|TRUE|FALSE
-41|Captain LeChuck|Ghost Pirate|TRUE|LeChuck's|TRUE|TRUE
-42|Putra|Ghost Cook|FALSE|LeChuck's|FALSE|FALSE
-43|Iron Rose|Ghost Pirate|FALSE|LeChuck's|TRUE|FALSE
-44|Ned|Human|TRUE|NULL|FALSE|FALSE
-45|Flambe|Fire Ghost|FALSE|LeChuck's|FALSE|TRUE
-46|Murray| Ghost|TRUE|NULL|FALSE|FALSE
-47|Locke Smith| Human|FALSE|Melee Island|FALSE|FALSE
-48|Herman Toothrot|NULL|FALSE|Terror Island|FALSE|NULL
-49|Voodoo Lady| Melee Island|TRUE|Melee Island|FALSE|TRUE
-50|Otis| Inmate|TRUE|Melee Island|TRUE|FALSE
-51|Carla| Pirate|TRUE|Melee Island|TRUE|FALSE
-52|Captain Madison|Pirate|FALSE|Melee Island|TRUE|FALSE
-53|Judge Planke|NPC|FALSE|Brrrmuda|FALSE|FALSE
-54|Boybrush Threepwood|Human|FALSE|NULL|NULL|FALSE
-55|Guybrush Threepwood|Mighty Pirate|TRUE|NULL|FALSE|NULL
-56|Elain Marley|Politician|TRUE|Scurvy Island|TRUE|FALSE
-57|Captain LeChuck|Ghost Pirate|TRUE|LeChuck's|TRUE|TRUE
-58|Putra|Ghost Cook|FALSE|LeChuck's|FALSE|FALSE
-59|Iron Rose|Ghost Pirate|FALSE|LeChuck's|TRUE|FALSE
-60|Ned|Human|TRUE|NULL|FALSE|FALSE
-61|Flambe|Fire Ghost|FALSE|LeChuck's|FALSE|TRUE
-62|Murray| Ghost|TRUE|NULL|FALSE|FALSE
-63|Locke Smith| Human|FALSE|Melee Island|FALSE|FALSE
-64|Herman Toothrot|NULL|FALSE|Terror Island|FALSE|NULL
-65|Voodoo Lady| Melee Island|TRUE|Melee Island|FALSE|TRUE
-66|Otis| Inmate|TRUE|Melee Island|TRUE|FALSE
-67|Carla| Pirate|TRUE|Melee Island|TRUE|FALSE
-68|Captain Madison|Pirate|FALSE|Melee Island|TRUE|FALSE
-69|Judge Planke|NPC|FALSE|Brrrmuda|FALSE|FALSE
-70|Boybrush Threepwood|Human|FALSE|NULL|NULL|FALSE
-71|Guybrush Threepwood|Mighty Pirate|TRUE|NULL|FALSE|NULL
-72|Elain Marley|Politician|TRUE|Scurvy Island|TRUE|FALSE
-73|Captain LeChuck|Ghost Pirate|TRUE|LeChuck's|TRUE|TRUE
-74|Putra|Ghost Cook|FALSE|LeChuck's|FALSE|FALSE
-75|Iron Rose|Ghost Pirate|FALSE|LeChuck's|TRUE|FALSE
-76|Ned|Human|TRUE|NULL|FALSE|FALSE
-77|Flambe|Fire Ghost|FALSE|LeChuck's|FALSE|TRUE
+2191|Murray|Ghost|null|TRUE|FALSE|FALSE
+2192|Locke Smith|Human|Melee Island|FALSE|FALSE|FALSE
+2193|Herman Toothrot|null|Terror Island|FALSE|FALSE|null
+2194|Voodoo Lady|Melee Island|Melee Island|TRUE|FALSE|TRUE
+2195|Otis|Inmate|Melee Island|TRUE|TRUE|FALSE
+2196|Carla|Pirate|Melee Island|TRUE|TRUE|FALSE
+2197|Captain Madison|Pirate|Melee Island|FALSE|TRUE|FALSE
+2198|Judge Planke|NPC|Brrrmuda|FALSE|FALSE|FALSE
+2199|Boybrush Threepwood|Human|null|FALSE|null|FALSE
+2200|Guybrush Threepwood|Mighty Pirate|null|TRUE|FALSE|null
+2201|Elain Marley|Politician|Scurvy Island|TRUE|TRUE|FALSE
+2202|Captain LeChuck|Ghost Pirate|LeChuck's ship|TRUE|TRUE|TRUE
+2203|Putra|Ghost Cook|LeChuck's ship|FALSE|FALSE|FALSE
+2204|Iron Rose|Ghost Pirate|LeChuck's ship|FALSE|TRUE|FALSE
+2205|Ned|Human|null|TRUE|FALSE|FALSE
+2206|Flambe|Fire Ghost|LeChuck's ship|FALSE|FALSE|TRUE
