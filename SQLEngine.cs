@@ -33,6 +33,10 @@ namespace Week7Databases
 
         }
 
+        /// <summary>
+        /// Run all necessary sql tasks sequentially
+        /// </summary>
+        /// <returns></returns>
         public List<Error> RunSqlTasks()
         {
             List<Error> errors = new List<Error>();
@@ -43,6 +47,10 @@ namespace Week7Databases
             return errors;
         }
 
+        /// <summary>
+        /// Read CSV file and insert all data into tables
+        /// </summary>
+        /// <returns></returns>
         private List<Error> Insert()
         {
             List<Error> errors = new List<Error>();
@@ -69,10 +77,6 @@ namespace Week7Databases
                             {
                                 lineItems[i] = lineItems[i].Trim();
 
-                                //if (lineItems[i] == String.Empty)
-                                //{
-                                //    lineItems[i] = @"NULL";
-                                //}
                                 if (lineItems[i].Contains("'"))
                                 {
                                     lineItems[i] = lineItems[i].Replace(lineItems[i].Substring(lineItems[i].IndexOf(@"'")), @"''s ship");
@@ -101,6 +105,7 @@ namespace Week7Databases
                 using (SqlConnection conn = new SqlConnection(SqlConString))
                 {
                     conn.Open();
+
                     foreach (var item in types)
                     {
                         string inLineSQL_type = $@"INSERT INTO {Types} {TypeHeaders} VALUES ('{item}')";
@@ -118,28 +123,6 @@ namespace Week7Databases
                             var query = command.ExecuteNonQuery();
                         }
                     }
-
-                    //foreach (var item in lines)
-                    //{
-                    //    if (item[1] != @"NULL" && item[1] != string.Empty)
-                    //    {
-                    //        item[1] = (types.IndexOf(item[1]) + 1).ToString();
-                    //    }
-                    //    else
-                    //    {
-                    //        item[1] = @"NULL";
-                    //    }
-                    //    if (item[2] != @"NULL" && item[2] != string.Empty)
-                    //    {
-                    //        item[2] = (map_locations.IndexOf(item[2]) + 1).ToString();
-                    //    }
-                    //    else
-                    //    {
-                    //        item[2] = @"NULL";
-
-                    //    }
-                    //}
-
 
                     foreach (var item in lines)
                     {
