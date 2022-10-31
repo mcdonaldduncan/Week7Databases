@@ -26,6 +26,6 @@ namespace Week7Databases
 
         public static string TypeHeaders => "([Type])";
 
-        public static string MapHeaders => "([Map_Location])";
+        public static string MapHeaders => "([Map_Location], [Heading])";
     }
 }

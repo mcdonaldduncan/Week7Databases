@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SqlTypes;
 using System.Data.SqlClient;
 using static Week7Databases.Constants;
+using System.Data;
 
 namespace Week7Databases
 {
@@ -44,6 +45,7 @@ namespace Week7Databases
             errors.AddRange(FullReport());
             errors.AddRange(FindMaplessCharacters());
             errors.AddRange(FindSwordNonHuman());
+            errors.AddRange(BinaryCharacterInfo());
             return errors;
         }
 
@@ -117,7 +119,7 @@ namespace Week7Databases
 
                     foreach (var item in map_locations)
                     {
-                        string inLineSQL_map = $@"INSERT INTO {Map_Locations} {MapHeaders} VALUES ('{item}')";
+                        string inLineSQL_map = $@"INSERT INTO {Map_Locations} {MapHeaders} VALUES ('{item}', '{GenerateRandomHeading()}')";
                         using (var command = new SqlCommand(inLineSQL_map, conn))
                         {
                             var query = command.ExecuteNonQuery();
@@ -214,6 +216,17 @@ namespace Week7Databases
         }
 
         /// <summary>
+        /// Generate a random heading for the map_location
+        /// </summary>
+        /// <returns></returns>
+        string GenerateRandomHeading()
+        {
+            Random rand = new Random();
+            string[] headings = { "N", "S", "E", "W" };
+            return headings[rand.Next(headings.Length)];
+        }
+
+        /// <summary>
         /// Convert empty results to a more readable value
         /// </summary>
         /// <param name="init"></param>
@@ -299,11 +312,7 @@ namespace Week7Databases
                 {
                     conn.Open();
 
-                    string inLineSql_primary = $@"SELECT {TableName}.ID, {TableName}.Character, {Types}.Type, {Map_Locations}.Map_Location, {ChildTableName}.Original_Character, {ChildTableName}.Sword_Fighter, {ChildTableName}.Magic_User
-                                                FROM {TableName} 
-                                                INNER JOIN {ChildTableName} ON {TableName}.ID = {ChildTableName}.CharacterID
-                                                LEFT JOIN {Types} ON {TableName}.TypeID = {Types}.ID
-                                                LEFT JOIN {Map_Locations} ON {TableName}.MapLocationID = {Map_Locations}.ID";
+                    string inLineSql_primary = @$"SELECT * FROM [dbo].[vw_FullReport]";
 
                     using (var command = new SqlCommand(inLineSql_primary, conn))
                     {
@@ -359,15 +368,12 @@ namespace Week7Databases
                 {
                     conn.Open();
 
-                    string inLineSql_primary = $@"SELECT {TableName}.Character
-                                                FROM {TableName} 
-                                                LEFT JOIN {Map_Locations} 
-                                                ON {TableName}.MapLocationID = {Map_Locations}.ID
-                                                WHERE {Map_Locations}.Map_Location is NULL";
+                    string spName = $@"[dbo].[sp_FindMaplessCharacters]";
 
-
-                    using (var command = new SqlCommand(inLineSql_primary, conn))
+                    using (var command = new SqlCommand(spName, conn))
                     {
+                        command.CommandType = CommandType.StoredProcedure;
+
                         var reader = command.ExecuteReader();
                         int index = 0;
                         while (reader.Read())
@@ -420,17 +426,12 @@ namespace Week7Databases
                 {
                     conn.Open();
 
-                    string inLineSql_primary = $@"SELECT {TableName}.ID, {TableName}.Character
-                                                FROM {TableName} 
-                                                LEFT JOIN {Types} 
-                                                ON {TableName}.TypeID = {Types}.ID
-                                                LEFT JOIN {ChildTableName}
-                                                ON {ChildTableName}.CharacterID = {TableName}.ID
-                                                WHERE {ChildTableName}.Sword_Fighter = 'TRUE' and {Types}.Type != 'Human'";
+                    string spName = $@"[dbo].[sp_FindSwordNonHuman]";
 
-
-                    using (var command = new SqlCommand(inLineSql_primary, conn))
+                    using (var command = new SqlCommand(spName, conn))
                     {
+                        command.CommandType = CommandType.StoredProcedure;
+
                         var reader = command.ExecuteReader();
                         int index = 0;
                         while (reader.Read())
@@ -463,6 +464,61 @@ namespace Week7Databases
                 errors.Add(new Error(e.Message, e.Source));
             }
 
+
+            return errors;
+        }
+
+        /// <summary>
+        /// Export data from BinaryConversion view
+        /// </summary>
+        /// <returns></returns>
+        private List<Error> BinaryCharacterInfo()
+        {
+            List<Error> errors = new List<Error>();
+            Dictionary<int, List<string>> lines = new Dictionary<int, List<string>>();
+            int fields = 6;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(SqlConString))
+                {
+                    conn.Open();
+
+                    string inLineSql_primary = @$"SELECT * FROM [dbo].[vw_BinaryConversion]";
+
+                    using (var command = new SqlCommand(inLineSql_primary, conn))
+                    {
+                        var reader = command.ExecuteReader();
+                        int index = 0;
+                        while (reader.Read())
+                        {
+                            List<string> temp = new List<string>();
+                            for (int i = 0; i < fields; i++)
+                            {
+                                temp.Add(ConvertEmptyValue($"{reader.GetValue(i)}"));
+                            }
+                            lines.Add(index++, temp);
+                        }
+
+                        reader.Close();
+
+                    }
+
+                    conn.Close();
+                }
+
+                string columNames = "ID,Character,Original_Character,Sword_Fighter,Magic_User,Binary";
+                ExportData("BinaryReport.txt", columNames, lines);
+
+            }
+            catch (IOException ioe)
+            {
+                errors.Add(new Error(ioe.Message, ioe.Source));
+            }
+            catch (Exception e)
+            {
+                errors.Add(new Error(e.Message, e.Source));
+            }
 
             return errors;
         }

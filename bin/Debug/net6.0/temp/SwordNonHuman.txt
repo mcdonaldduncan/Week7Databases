@@ -1,0 +1,39 @@
+Processed at: 10/30/2022 9:07:45 PM
+
+ID, Character
+2195|Otis
+2196|Carla
+2197|Captain Madison
+2201|Elain Marley
+2202|Captain LeChuck
+2204|Iron Rose
+2211|Otis
+2212|Carla
+2213|Captain Madison
+2217|Elain Marley
+2218|Captain LeChuck
+2220|Iron Rose
+2227|Otis
+2228|Carla
+2229|Captain Madison
+2233|Elain Marley
+2234|Captain LeChuck
+2236|Iron Rose
+3083|Otis
+3084|Carla
+3085|Captain Madison
+3089|Elain Marley
+3090|Captain LeChuck
+3092|Iron Rose
+3099|Otis
+3100|Carla
+3101|Captain Madison
+3105|Elain Marley
+3106|Captain LeChuck
+3108|Iron Rose
+3115|Otis
+3116|Carla
+3117|Captain Madison
+3121|Elain Marley
+3122|Captain LeChuck
+3124|Iron Rose
