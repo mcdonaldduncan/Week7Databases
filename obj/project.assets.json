@@ -470,19 +470,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\dfmcd\\.nuget\\packages\\": {}
+    "C:\\Users\\dfmcd98\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\dfmcd\\Documents\\GitHub\\Week7Databases\\Week7Databases.csproj",
+      "projectUniqueName": "D:\\GitHubD\\Week7Databases\\Week7Databases.csproj",
       "projectName": "Week7Databases",
-      "projectPath": "C:\\Users\\dfmcd\\Documents\\GitHub\\Week7Databases\\Week7Databases.csproj",
-      "packagesPath": "C:\\Users\\dfmcd\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\dfmcd\\Documents\\GitHub\\Week7Databases\\obj\\",
+      "projectPath": "D:\\GitHubD\\Week7Databases\\Week7Databases.csproj",
+      "packagesPath": "C:\\Users\\dfmcd98\\.nuget\\packages\\",
+      "outputPath": "D:\\GitHubD\\Week7Databases\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\dfmcd\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\dfmcd98\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -529,7 +529,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }
